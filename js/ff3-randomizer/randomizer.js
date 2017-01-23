@@ -240,7 +240,7 @@ var FF3 = (function(window, $, module, undefined) {
     };
     
     function randomizeChests() {
-        ROM.set(random_array_from(item_pool, 256), module.address.chestsData);
+        ROM.set(random_array_from(module.treasureChest, 512), module.address.chestsData);
     };
     
     function randomizeDropsSteals() {
