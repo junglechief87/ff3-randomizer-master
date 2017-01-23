@@ -74,9 +74,11 @@ var FF3 = (function(window, $, module, undefined) {
     };
     
     function shuffleJobs() {
-        var jobs_data = [];//, shuffled_jobs = [];
+        var jobs_data = [];
         var jobs_order = [];
-        var jobs_pool_scrach = jobs_pool;
+        var jobs_pool_scratch = [];
+        for (var i = 0; i < jobs_pool.length; i++)
+            jobs_pool_scratch.push(jobs_pool[i]);
         var magJobs = magJobs = [3, 5, 6, 14, 18, 20];
         if ($('#chk-bal-mini-toad-fix').is(':checked'))
             magJobs = [3, 4, 5, 6, 14, 15, 17, 18, 19, 20];
@@ -96,24 +98,25 @@ var FF3 = (function(window, $, module, undefined) {
             jobs_order = [];
             for (var i = 0; i < jobs_pool.length; i++) {
                 var next = parseInt(Math.random() * jobs_pool_scratch.length);
-                jobs_order.push(jobs_pool_scratch(next));
+                jobs_order.push(jobs_pool_scratch[next]);
                 jobs_pool_scratch.splice(next, 1);
             };
 
             if ($('#chk-jobs-1st').is(':checked')) {
                 for (var i = 0; i < earlyjobcount; i++) {
-                    if (havemagJob.includes(jobs_order(i)))
+                    if (magJobs.includes(jobs_order[i]))
                         havemagJob = true;
-                    if (haverunJob.includes(jobs_order(i)))
+                    if (runJobs.includes(jobs_order[i]))
                         haverunJob = true;
                 };
             };
-        } while (havemagJob == false || haverunJob == false || !$('#chk-jobs-1st').is(':checked'));
+        } while ((havemagJob == false || haverunJob == false) && $('#chk-jobs-1st').is(':checked'));
 
         for (var i = 0; i < jobs_order.length; i++) {
             jobs_data.push(new module.Job().loadFromROM(ROM, jobs_order[i]));
-            jobs_data[0].saveToROM(ROM, jobs_pool[i]);
-            jobs_data.splice(0, 1);
+        };
+        for (var i = 0; i < jobs_order.length; i++) {
+            jobs_data[i].saveToROM(ROM, jobs_pool[i]);
         };
     };
 
